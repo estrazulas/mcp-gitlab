@@ -1,0 +1,8 @@
+gitlab:
+  base_url: "${GITLAB_BASE_URL}"
+  token_env_var: "GITLAB_TOKEN"  # Set this environment variable with your application token
+
+# Optional defaults
+filters:
+  default_state: "opened"  # opened, closed, all
+  max_results: 100
