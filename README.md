@@ -12,12 +12,10 @@ A Model Context Protocol (MCP) server for listing GitLab issues with filters.
 ## Setup
 
 1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
-3. Configure environment variables:
-   - The `.env` file is already configured with your GitLab instance
-   - If needed, edit `.env` to change the GitLab URL or token
-4. Run the server: `python -m src.server`
-
+2. Config .env using .env.example as base
+3. Insert your gitlab personal token
+4. Run docker
+   
 ## Docker
 
 Build and run with Docker:
@@ -33,7 +31,7 @@ docker compose logs -f
 docker compose down
 ```
 
-## Dev Containers
+## Dev Containers (optional)
 
 For a complete development environment without installing anything locally, use VS Code Dev Containers:
 
@@ -47,7 +45,7 @@ The Dev Container includes:
 - MCP server running in the background
 - Port forwarding for easy access
 
-## Configuration
+## Configuration (required)
 
 The server uses environment variables for configuration. You can set them directly or use a `.env` file:
 
@@ -106,7 +104,7 @@ claude mcp add gitlab-issues sse http://127.0.0.1:8000/sse
 
 ### 3. Restart VSCode or Claude
 
-Close and reopen CLI for changes to take effect.
+Close and reopen AI CLI for changes to take effect.
 
 ### 4. Examples
 
@@ -123,15 +121,11 @@ Claude/VSCode will call the `list_issues` tool automatically.
 
 Parameters:
 
-- `project_id`: The ID or path of the GitLab project (required)
+- `project_id`: The ID or path of the GitLab project (required) 
 - `assignee_username`: Filter by assignee username (optional)
 - `milestone`: Filter by milestone title (optional)
 - `labels`: Comma-separated list of labels (optional)
 - `state`: Issue state - `opened`, `closed`, or `all` (default: `opened`)
-
-## Testing
-
-Run tests: `pytest`
 
 ## Inspect MCP
 
