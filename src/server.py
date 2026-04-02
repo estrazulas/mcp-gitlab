@@ -38,11 +38,19 @@ class ListIssuesResponse(BaseModel):
 mcp = FastMCP("GitLab Issues Server")
 app = mcp.sse_app
 
-PROMPT_FILE = Path(__file__).resolve().parent / "prompts" / "listar_issues_projetos.md"
+PROMPT_FILE_CANDIDATES = [
+    Path(__file__).resolve().parent / "prompts" / "listar_issues_projetos.md",
+    Path(__file__).resolve().parents[1] / "prompts" / "listar_issues_projetos.md",
+]
 
 
 def _load_prompt_text() -> str:
-    return PROMPT_FILE.read_text(encoding="utf-8")
+    for prompt_file in PROMPT_FILE_CANDIDATES:
+        if prompt_file.exists():
+            return prompt_file.read_text(encoding="utf-8")
+
+    candidates = ", ".join(str(path) for path in PROMPT_FILE_CANDIDATES)
+    raise FileNotFoundError(f"Prompt file not found. Checked: {candidates}")
 
 @mcp.tool()
 async def list_issues(
