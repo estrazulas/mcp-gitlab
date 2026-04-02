@@ -38,7 +38,7 @@ class ListIssuesResponse(BaseModel):
 mcp = FastMCP("GitLab Issues Server")
 app = mcp.sse_app
 
-PROMPT_FILE = Path(__file__).resolve().parents[1] / "prompts" / "listar_issues_projetos.md"
+PROMPT_FILE = Path(__file__).resolve().parent / "prompts" / "listar_issues_projetos.md"
 
 
 def _load_prompt_text() -> str:

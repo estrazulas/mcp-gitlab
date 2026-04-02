@@ -131,7 +131,7 @@ Parameters:
 
 The server also exposes a reusable MCP prompt named `listar_issues_projetos`.
 
-- It reuses the content from `prompts/listar_issues_projetos.md`
+- It reuses the content from `src/prompts/listar_issues_projetos.md`
 - It is available to MCP clients that support prompt discovery
 - In VS Code, the prompt appears alongside the server's MCP capabilities and can be inserted or executed from the client UI
 
