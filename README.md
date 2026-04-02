@@ -127,6 +127,16 @@ Parameters:
 - `labels`: Comma-separated list of labels (optional)
 - `state`: Issue state - `opened`, `closed`, or `all` (default: `opened`)
 
+## Available Prompt: `listar_issues_projetos`
+
+The server also exposes a reusable MCP prompt named `listar_issues_projetos`.
+
+- It reuses the content from `prompts/listar_issues_projetos.md`
+- It is available to MCP clients that support prompt discovery
+- In VS Code, the prompt appears alongside the server's MCP capabilities and can be inserted or executed from the client UI
+
+This prompt is read-only and does not change how `list_issues` works.
+
 ## Inspect MCP
 
 ```bash
