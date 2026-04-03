@@ -63,7 +63,7 @@ The server uses environment variables for configuration. You can set them direct
 
 The server will automatically load variables from the `.env` file.
 
-## Claude Client Integration
+## Client Integration
 
 ### 1. Start the MCP Server
 
