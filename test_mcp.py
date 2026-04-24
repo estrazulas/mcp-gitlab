@@ -3,84 +3,48 @@
 Test script for the GitLab Issues MCP server
 """
 import asyncio
-import httpx
+
 import json
 
+from mcp.client.session import ClientSession
+from mcp.client.sse import sse_client
+
 async def test_mcp_server():
-    """Test the MCP server by calling the list_issues tool"""
+    """Test the MCP server through the SSE transport."""
 
     # MCP server URL
-    url = "http://127.0.0.1:8000/mcp"
-    headers = {"Accept": "application/json"}
+    url = "http://127.0.0.1:8000/sse"
 
-    async with httpx.AsyncClient() as client:
-        try:
-            # First, initialize the MCP session
-            init_request = {
-                "jsonrpc": "2.0",
-                "id": 1,
-                "method": "initialize",
-                "params": {
-                    "protocolVersion": "2024-11-05",
-                    "capabilities": {},
-                    "clientInfo": {
-                        "name": "test-client",
-                        "version": "1.0.0"
-                    }
-                }
-            }
-
+    async with sse_client(url) as (read_stream, write_stream):
+        async with ClientSession(read_stream, write_stream) as session:
             print("Initializing MCP session...")
-            response = await client.post(url, json=init_request, headers=headers)
-            print(f"Init response: {response.status_code}")
-            if response.status_code == 200:
-                result = response.json()
-                print(f"Response: {json.dumps(result, indent=2)}")
-            else:
-                print(f"Error: {response.text}")
-
-            # List available tools
-            tools_request = {
-                "jsonrpc": "2.0",
-                "id": 2,
-                "method": "tools/list",
-                "params": {}
-            }
+            init_result = await session.initialize()
+            print(f"Initialized: {json.dumps(init_result.model_dump(mode='json'), indent=2)}")
 
             print("\nListing available tools...")
-            response = await client.post(url, json=tools_request, headers=headers)
-            print(f"Tools response: {response.status_code}")
-            if response.status_code == 200:
-                result = response.json()
-                print(f"Response: {json.dumps(result, indent=2)}")
-            else:
-                print(f"Error: {response.text}")
+            tools_result = await session.list_tools()
+            print(f"Tools: {json.dumps(tools_result.model_dump(mode='json'), indent=2)}")
 
-            # Call the list_issues tool with a real project ID
-            call_request = {
-                "jsonrpc": "2.0",
-                "id": 3,
-                "method": "tools/call",
-                "params": {
-                    "name": "list_issues",
-                    "arguments": {
-                        "project_id": "545",  # Real project ID found
-                        "state": "opened"
-                    }
-                }
-            }
+            print("\nListing available prompts...")
+            prompts_result = await session.list_prompts()
+            print(f"Prompts: {json.dumps(prompts_result.model_dump(mode='json'), indent=2)}")
+
+            print("\nFetching prompt content...")
+            prompt_result = await session.get_prompt("listar_issues_projetos")
+            print(f"Prompt: {json.dumps(prompt_result.model_dump(mode='json'), indent=2)}")
 
             print("\nCalling list_issues tool...")
-            response = await client.post(url, json=call_request, headers=headers)
-            print(f"Call response: {response.status_code}")
-            if response.status_code == 200:
-                result = response.json()
-                print(f"Result: {json.dumps(result, indent=2)}")
-            else:
-                print(f"Error response: {response.text}")
-
-        except Exception as e:
-            print(f"Error: {e}")
+            try:
+                call_result = await session.call_tool(
+                    "list_issues",
+                    {
+                        "project_id": "545",
+                        "state": "opened",
+                    },
+                )
+                print(f"Call result: {json.dumps(call_result.model_dump(mode='json'), indent=2)}")
+            except Exception as exc:
+                print(f"Tool call error: {exc}")
 
 if __name__ == "__main__":
     asyncio.run(test_mcp_server())

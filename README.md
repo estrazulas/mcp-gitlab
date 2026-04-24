@@ -64,7 +64,7 @@ The server uses environment variables for configuration. You can set them direct
 
 The server will automatically load variables from the `.env` file.
 
-## Claude Client Integration
+## Client Integration
 
 ### 1. Start the MCP Server
 
@@ -153,6 +153,16 @@ Parameters:
 - `per_page`: Page size used when fetching projects from GitLab
 
 Use the returned `path_with_namespace` value with `list_issues`.
+
+## Available Prompt: `listar_issues_projetos`
+
+The server also exposes a reusable MCP prompt named `listar_issues_projetos`.
+
+- It reuses the content from `src/prompts/listar_issues_projetos.md`
+- It is available to MCP clients that support prompt discovery
+- In VS Code, the prompt appears alongside the server's MCP capabilities and can be inserted or executed from the client UI
+
+This prompt is read-only and does not change how `list_issues` works.
 
 ## Inspect MCP
 

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import Optional
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel, Field
@@ -51,6 +52,20 @@ class ListProjectsResponse(BaseModel):
 # Create MCP server with stateless HTTP
 mcp = FastMCP("GitLab Issues Server")
 app = mcp.sse_app
+
+PROMPT_FILE_CANDIDATES = [
+    Path(__file__).resolve().parent / "prompts" / "listar_issues_projetos.md",
+    Path(__file__).resolve().parents[1] / "prompts" / "listar_issues_projetos.md",
+]
+
+
+def _load_prompt_text() -> str:
+    for prompt_file in PROMPT_FILE_CANDIDATES:
+        if prompt_file.exists():
+            return prompt_file.read_text(encoding="utf-8")
+
+    candidates = ", ".join(str(path) for path in PROMPT_FILE_CANDIDATES)
+    raise FileNotFoundError(f"Prompt file not found. Checked: {candidates}")
 
 @mcp.tool()
 async def list_projects(
@@ -177,6 +192,20 @@ async def list_issues(
             total_count=0,
             message=f"Unexpected error: {str(e)}"
         )
+
+
+@mcp.prompt(
+    name="listar_issues_projetos",
+    title="Listar issues por projetos",
+    description="Prompt para gerar o relatório de issues dos projetos configurados"
+)
+def listar_issues_projetos_prompt() -> list[dict[str, str]]:
+    return [
+        {
+            "role": "user",
+            "content": _load_prompt_text()
+        }
+    ]
     
 if __name__ == "__main__":
     # Deixamos o mcp.run gerenciar o servidor. 

@@ -1,12 +1,12 @@
 {
     "name": "MCP GitLab Issues Dev",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".."
-    },
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "mcp-gitlab",
+    "workspaceFolder": "/app",
+    "overrideCommand": false,
     "forwardPorts": [8000],
-    "postCreateCommand": "pip install --no-cache-dir -r requirements.txt",
-    "postStartCommand": "/workspaces/mcp_gitlab_list_issues/start_server.sh",
     "customizations": {
         "vscode": {
             "extensions": [
