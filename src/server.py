@@ -33,9 +33,82 @@ class ListIssuesResponse(BaseModel):
     total_count: int
     message: Optional[str] = None
 
+class Project(BaseModel):
+    id: int = Field(description="GitLab project ID")
+    name: str = Field(description="Project name")
+    path: str = Field(description="Project path")
+    path_with_namespace: str = Field(description="Full project path with namespace")
+    description: Optional[str] = Field(None, description="Project description")
+    web_url: str = Field(description="Project web URL")
+    visibility: Optional[str] = Field(None, description="Project visibility")
+
+
+class ListProjectsResponse(BaseModel):
+    projects: list[Project]
+    total_count: int
+    message: Optional[str] = None
+
 # Create MCP server with stateless HTTP
 mcp = FastMCP("GitLab Issues Server")
 app = mcp.sse_app
+
+@mcp.tool()
+async def list_projects(
+    search: Optional[str] = Field(None, description="Search term to filter projects by name or path"),
+    membership: bool = Field(True, description="Limit results to projects the token has membership in"),
+    per_page: int = Field(100, description="Maximum number of projects per page to request from GitLab"),
+) -> ListProjectsResponse:
+    """
+    List accessible GitLab projects so the client can infer the project path before listing issues.
+
+    Returns project metadata including path_with_namespace, which is the preferred value for list_issues.
+    """
+    try:
+        base_url = os.getenv("GITLAB_BASE_URL")
+        if not base_url:
+            raise ValueError("GITLAB_BASE_URL environment variable is required")
+        token = os.getenv("GITLAB_TOKEN")
+
+        if not token:
+            raise ValueError("GITLAB_TOKEN environment variable is required")
+
+        client = GitLabClient(base_url, token)
+
+        projects_data = await client.list_projects(
+            search=search,
+            membership=membership,
+            per_page=per_page,
+        )
+
+        await client.close()
+
+        projects = [Project(**project) for project in projects_data]
+
+        if not projects:
+            return ListProjectsResponse(
+                projects=[],
+                total_count=0,
+                message="No projects found for the current token and filters."
+            )
+
+        return ListProjectsResponse(
+            projects=projects,
+            total_count=len(projects)
+        )
+
+    except ValueError as e:
+        return ListProjectsResponse(
+            projects=[],
+            total_count=0,
+            message=str(e)
+        )
+    except Exception as e:
+        return ListProjectsResponse(
+            projects=[],
+            total_count=0,
+            message=f"Unexpected error: {str(e)}"
+        )
+
 
 @mcp.tool()
 async def list_issues(
@@ -47,6 +120,8 @@ async def list_issues(
 ) -> ListIssuesResponse:
     """
     List GitLab issues for a project with optional filters.
+
+    If you do not know the project path, call list_projects first and use path_with_namespace.
 
     Returns issues matching the specified criteria. If no issues are found,
     returns an empty list with a message.

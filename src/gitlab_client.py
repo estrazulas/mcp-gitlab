@@ -20,6 +20,56 @@ class GitLabClient:
         self.token = token
         self.client = httpx.AsyncClient(timeout=30.0)
 
+    async def list_projects(
+        self,
+        search: Optional[str] = None,
+        membership: bool = True,
+        per_page: int = 100,
+    ) -> List[Dict]:
+        url = f"{self.base_url}/api/v4/projects"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        params = {
+            "simple": "true",
+            "membership": str(membership).lower(),
+            "per_page": per_page,
+            "page": 1,
+            "order_by": "last_activity_at",
+            "sort": "desc",
+        }
+
+        if search:
+            params["search"] = search
+
+        projects: List[Dict] = []
+        page = 1
+
+        try:
+            while True:
+                request_params = params.copy()
+                request_params["page"] = page
+
+                response = await self.client.get(url, headers=headers, params=request_params)
+                if response.status_code == 401:
+                    raise ValueError("Token expired or invalid")
+                elif response.status_code != 200:
+                    raise ValueError(f"GitLab API error: {response.status_code} - {response.text}")
+
+                page_items = response.json()
+                if not isinstance(page_items, list):
+                    raise ValueError("Unexpected GitLab response for project listing")
+
+                projects.extend(page_items)
+
+                next_page = response.headers.get("X-Next-Page")
+                if not next_page:
+                    break
+
+                page = int(next_page)
+
+            return projects
+        except httpx.RequestError as e:
+            raise ValueError(f"Request failed: {str(e)}")
+
     async def list_issues(
         self,
         project_id: str,
