@@ -1,6 +1,12 @@
 # Environment variables
 .env
 .env.local
+
+# User configuration
+.user
+
+# Generated reports
+gen/
 mcp.json
 .vscode
 
