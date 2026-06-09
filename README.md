@@ -66,28 +66,39 @@ The server will automatically load variables from the `.env` file.
 
 ## Client Integration
 
-### 1. Start the MCP Server
+### 1. Configure MCP (stdio — recommended)
 
-Make sure the server is running on `http://127.0.0.1:8000/sse`
-With NodeJS you can confirm tools usage with
+The server runs via **stdio**, letting Claude Code manage the process automatically.
 
-```bash
-npx @modelcontextprotocol/inspector http://127.0.0.1:8000/sse
+**For Claude Code** — add to `.claude/settings.json` in your project:
 
+```json
+{
+  "mcpServers": {
+    "gitlab-issues": {
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": ["-m", "src.server"]
+    }
+  }
+}
 ```
 
-### 2. Configure 
+Or add via CLI:
 
-Create the MCP Configuration File
-Create .vscode/mcp.json in your project:
+```bash
+claude mcp add gitlab-issues stdio -- python -m src.server
+```
+
+**For VS Code** — add to `.vscode/mcp.json`:
 
 ```json
 {
   "servers": {
     "gitlab-issues": {
-      "type": "sse",
-      "url": "http://127.0.0.1:8000/sse",
-      "headers": {},
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": ["-m", "src.server"],
       "tools": [
         "list_projects",
         "list_issues"
@@ -97,12 +108,15 @@ Create .vscode/mcp.json in your project:
 }
 ```
 
-With Claude
+### 2. Alternative — SSE via Docker
+
+If you prefer running the server as a network service (SSE), use Docker:
 
 ```bash
-claude mcp add gitlab-issues sse http://127.0.0.1:8000/sse
-
+docker compose up -d --build
 ```
+
+Then configure your MCP client with `http://127.0.0.1:8000/sse` and `type: "sse"`.
 
 ### 3. Restart VSCode or Claude
 
@@ -167,5 +181,9 @@ This prompt is read-only and does not change how `list_issues` works.
 ## Inspect MCP
 
 ```bash
-npx @modelcontextprotocol/inspector http://127.0.0.1:8000/sse
+# stdio mode (current)
+npx @modelcontextprotocol/inspector .venv/bin/python -m src.server
+
+# SSE mode (when running via Docker)
+# npx @modelcontextprotocol/inspector http://127.0.0.1:8000/sse
 ```

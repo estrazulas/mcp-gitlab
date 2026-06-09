@@ -208,6 +208,5 @@ def listar_issues_projetos_prompt() -> list[dict[str, str]]:
     ]
     
 if __name__ == "__main__":
-    # Deixamos o mcp.run gerenciar o servidor. 
-    # Ele buscará as configurações de HOST e PORT nas variáveis de ambiente.
-    mcp.run(transport="sse")
+    # Usamos stdio para que o Claude Code gerencie o processo automaticamente.
+    mcp.run(transport="stdio")
