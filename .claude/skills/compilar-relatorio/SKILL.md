@@ -19,7 +19,7 @@ O usuário pode informar o período inline no prompt ao invocar `/compilar-relat
 - `/compilar-relatorio 01/06/2026-30/06/2026`
 - `/compilar-relatorio 01/06/2026 a 30/06/2026`
 - `/compilar-relatorio periodo:01/06/2026 ate 30/06/2026`
-- `/compilar-relatorio 10/05/2026-15/05/2026 label:"Ingresso IFC" projeto:dsi/ingresso-ifc`
+- `/compilar-relatorio 10/05/2026-15/05/2026 label:"Minha Label" projeto:grupo/meu-projeto`
 
 **Regras de extração inline:**
 
@@ -61,7 +61,7 @@ Pergunte ao usuário que filtros deseja usar para buscar as issues no GitLab. Os
 Aguarde a resposta.
 
 **Pergunta 4 — Projetos:**
-"Quais projetos? Informe o nome ou parte do nome (ex: ingresso, dsi, siap). Pode informar múltiplos separados por vírgula. Deixe vazio para trazer de todos os projetos."
+"Quais projetos? Informe o nome ou parte do nome (ex: meu-projeto, grupo/projeto). Pode informar múltiplos separados por vírgula. Deixe vazio para trazer de todos os projetos."
 
 Aguarde a resposta.
 
@@ -75,7 +75,7 @@ Aguarde a resposta.
 
 Aguarde a resposta.
 
-> **Simplificação:** se o usuário informou filtros inline (ex: `label:"Ingresso IFC" projeto:dsi/ingresso-ifc situacao:abertas milestone:06/26`), pule as perguntas correspondentes e já use esses valores. Os identificadores seguem o mesmo padrão do `/plano-trabalho`:
+> **Simplificação:** se o usuário informou filtros inline (ex: `label:"Minha Label" projeto:grupo/meu-projeto situacao:abertas milestone:06/26`), pule as perguntas correspondentes e já use esses valores. Os identificadores seguem o mesmo padrão do `/plano-trabalho`:
 > - `label:` — Label/Tag
 > - `projeto:` ou `projetos:` — Nome do(s) projeto(s)
 > - `situacao:` ou `situação:` — Situação
@@ -87,7 +87,7 @@ Invoque a skill `/plano-trabalho` usando a ferramenta `Skill` com os filtros col
 
 **Importante:** ao invocar o `/plano-trabalho`, forneça **todos os filtros inline** já no prompt para evitar que a skill pergunte novamente. Exemplo:
 
-> Skill tool: skill="plano-trabalho", args="label:Ingresso IFC projeto:dsi/ingresso-ifc situacao:fechadas milestone:06/26"
+> Skill tool: skill="plano-trabalho", args="label:Minha Label projeto:grupo/meu-projeto situacao:fechadas milestone:06/26"
 
 Aguarde o resultado completo da skill (a lista de issues formatada).
 

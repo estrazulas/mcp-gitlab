@@ -18,9 +18,9 @@ Quando invocado com `/plano-trabalho`, siga **rigorosamente** os passos abaixo p
 
 O usuário pode ter informado filtros diretamente no prompt ao invocar `/plano-trabalho`. Exemplos:
 
-- `/plano-trabalho label:back-end projeto:dsi/ingresso`
-- `/plano-trabalho label:bug,urgencia projeto:dsi/ingresso-ifc,dsi/siap situacao:fechadas milestone:06/26`
-- `/plano-trabalho label:"Ingresso IFC"`
+- `/plano-trabalho label:back-end projeto:grupo/meu-projeto`
+- `/plano-trabalho label:bug,urgencia projeto:grupo/projeto-a,grupo/projeto-b situacao:fechadas milestone:06/26`
+- `/plano-trabalho label:"Minha Label"`
 
 Extraia os valores usando estes identificadores no texto (case insensitive):
 
@@ -31,7 +31,7 @@ Extraia os valores usando estes identificadores no texto (case insensitive):
 | `situacao:` ou `situação:` | Situação (aberta, fechada, todas) |
 | `milestone:` | Milestone |
 
-Se um valor estiver entre aspas (`"..."`), use o conteúdo inteiro como um valor único (ex: `label:"Ingresso IFC"` → label = "Ingresso IFC").
+Se um valor estiver entre aspas (`"..."`), use o conteúdo inteiro como um valor único (ex: `label:"Minha Label"` → label = "Minha Label").
 
 #### 1b. Perguntar apenas o que não foi informado
 
@@ -43,7 +43,7 @@ Use os valores extraídos inline como filtros iniciais. Para cada filtro **não*
 Aguarde a resposta.
 
 **Pergunta 2 — Projetos (se não veio inline):**
-"Quais projetos? Informe o nome ou parte do nome (ex: ingresso, dsi, siap). Pode informar múltiplos separados por vírgula. Deixe vazio para trazer de todos os projetos que você tem acesso."
+"Quais projetos? Informe o nome ou parte do nome (ex: meu-projeto, grupo/projeto). Pode informar múltiplos separados por vírgula. Deixe vazio para trazer de todos os projetos que você tem acesso."
 
 Aguarde a resposta.
 
@@ -79,7 +79,7 @@ Use a ferramenta `list_projects` do MCP do GitLab para listar os projetos dispon
 
 Para cada projeto identificado, use a ferramenta `list_issues` do MCP do GitLab com os seguintes parâmetros:
 
-- `project_id`: o `path_with_namespace` do projeto (ex: `dsi/ingresso`)
+- `project_id`: o `path_with_namespace` do projeto (ex: `grupo/meu-projeto`)
 - `labels`: a label informada pelo usuário (se houver, separada por vírgulas se múltiplas)
 - `state`: a situação informada (opened, closed, ou all)
 - `milestone`: a milestone informada pelo usuário (se houver; se vazio, não enviar o parâmetro)
@@ -145,12 +145,12 @@ Apresente o resumo completo com:
 ### Exemplo do template (baseado na issue #98)
 
 ```
-#98 - Sistema de Ingresso - Integração com API BB
+#98 - Relatório de Vendas - Dashboard
 Tipo: Desenvolvimento
-Sistema: dsi/ingresso
-Url: dsi/ingresso/-/issues/98
+Sistema: grupo/meu-projeto
+Url: grupo/meu-projeto/-/issues/98
 
-Resumo: Evolui a integração do Sistema de Ingresso com a API do Banco do Brasil, com foco em dar suporte operacional e garantir a continuidade do fluxo de pagamento e integração.
+Resumo: Cria dashboard para visualização de relatório de vendas com filtros por período, região e categoria de produto.
 ```
 
 ## Regras importantes

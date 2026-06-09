@@ -58,17 +58,7 @@ Analise o título e a descrição do chamado para inferir o tipo:
 
 #### b) Sistema
 
-Tente inferir o sistema a partir do título e descrição. Exemplos de sistemas:
-
-| Palavra-chave | Sistema |
-|---|---|
-| SIGAA, sigaa, Siggaa, notas, acadêmico | **sigaa** |
-| Ingresso, reserva de vagas, DEING, vestibular | **ingresso** |
-| ENADE, calendário ENADE | **enade** |
-| Minerva, servidor DEING | **infraestrutura** |
-| SUAP, suap | **suap** |
-| Sistema de Ingresso | **ingresso** |
-| Servidor, acesso ao servidor, VPN, rede | **infraestrutura** |
+Tente inferir o sistema a partir do título e descrição. Use seu conhecimento genérico para classificar (ex: sistema acadêmico, portal, ERP, intranet, sistema de vendas, etc.).
 
 **Regra:** Se **não for possível inferir** o sistema, pergunte ao usuário qual sistema está relacionado àquele chamado.
 
@@ -84,18 +74,18 @@ Onde:
 - **XXXX**: número do chamado (apenas os dígitos)
 - **descricao do chamado**: utilizar preferencialmente o **título**, ajustado se necessário para ficar mais claro (pode encurtar ou complementar com base na descrição)
 - **tipo**: "suporte tecnico" ou "suporte negocial" (exatamente como escrito, sem acentos)
-- **sistema**: nome do sistema inferido (sigaa, ingresso, enade, infraestrutura, etc.)
+- **sistema**: nome do sistema inferido (ex: portal, erp, academico, vendas, infraestrutura, etc.)
 
 ### 5. Apresentar o resultado final
 
 Apresente ao usuário a lista completa formatada. Exemplo de saída esperada:
 
 ```
-- 34142 - Não visualização de notas - suporte tecnico - sigaa
-- 34383 - Acesso ao sistema reserva de vagas - suporte negocial - ingresso
-- 34000 - Acesso ao servidor do DEING - suporte negocial - infraestrutura
-- 32201 - Perfil Administrador no Sistema de Ingresso - suporte negocial - ingresso
-- 33421 - Visualização cadastro Calendário ENADE - suporte tecnico - enade
+- 34142 - Não visualização de notas - suporte tecnico - academico
+- 34383 - Acesso ao modulo de cadastro - suporte negocial - erp
+- 34000 - Acesso ao servidor de arquivos - suporte negocial - infraestrutura
+- 32201 - Perfil Administrador no sistema de vendas - suporte negocial - vendas
+- 33421 - Erro ao gerar relatorio financeiro - suporte tecnico - erp
 ```
 
 Após a lista, **resuma**:

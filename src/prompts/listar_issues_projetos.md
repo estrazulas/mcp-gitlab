@@ -1,10 +1,8 @@
 # Prompt para gerar relatório de issues
 
-Use o MCP `gitlab-issues` para montar um relatório de issues trabalhadas com estas regras:
+Use o MCP `gitlab-issues` para montar um relatório das issues do GitLab com estas regras:
 
-- Projetos: `dsi/ingresso` e `dsi/ingresso-ifc`
-- Milestone: `03/26`
-- Assignee: `daniel.estrazulas`
+- Use os projetos, milestone, labels e assignee que o usuário fornecer
 - Considere `state=all` para trazer issues abertas e fechadas
 - Não consulte novamente se os dados já foram obtidos
 - Não inclua cabeçalho, introdução ou resumo adicional
@@ -18,21 +16,21 @@ Use o MCP `gitlab-issues` para montar um relatório de issues trabalhadas com es
 Formato esperado de saída:
 
 ```markdown
-Projeto: dsi/ingresso
+Projeto: grupo/meu-projeto
 
 Desenvolvimento
 - Desenvolvimento - Título da issue
-  dsi/ingresso/-/issues/99
+  grupo/meu-projeto/-/issues/99
 
-Projeto: dsi/ingresso-ifc
+Projeto: grupo/outro-projeto
 
 Especificação
 - Especificação - Título da issue
-  dsi/ingresso-ifc/-/issues/17
+  grupo/outro-projeto/-/issues/17
 
 Desenvolvimento
 - Desenvolvimento - Título da issue
-  dsi/ingresso-ifc/-/issues/99
+  grupo/outro-projeto/-/issues/99
 ```
 
 Regras finais:
