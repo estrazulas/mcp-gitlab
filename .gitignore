@@ -47,3 +47,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Agent local folders
+.claude/
+.agents/
